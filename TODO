@@ -1,0 +1,12 @@
+TODO
+----
+ 
+ * add font support?
+
+
+DONE
+----
+ * add SVG generator by subclassing BaseHandler
+ * add PNG handler
+ * add code to start packer or resizer
+ * add atlas code
