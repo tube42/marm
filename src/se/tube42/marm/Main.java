@@ -21,6 +21,7 @@ public class Main
         Handler bh = new Handler(outdir);
         bh.setProcessor("svg", new SVGProcessor());
         bh.setProcessor("png", new PNGProcessor());
+        bh.setProcessor("hiero", new HieroProcessor());
         bh.setDefaultProcessor(new CopyProcessor());
         
         bh.scan(indir);

@@ -23,6 +23,7 @@
   
   <target name="run" depends="compile" >
     
+    <!-- test resizer -->
     <java classname="se.tube42.marm.Main" fork="yes">
       <classpath path="build"/>  
       <arg value="resize"/>
@@ -30,6 +31,7 @@
       <arg value="build/out"/>
     </java>
     
+    <!-- test packer -->
     <java classname="se.tube42.marm.Main" fork="yes">
       <classpath path="build"/>  
       <arg value="pack"/>
@@ -37,22 +39,5 @@
       <arg value="build/out"/>
       <arg value="atlas1" />
     </java>
-    
-    <java classname="se.tube42.marm.Main" fork="yes">
-      <classpath path="build"/>  
-      <arg value="pack"/>
-      <arg value="build/out/2"/>
-      <arg value="build/out"/>
-      <arg value="atlas2" />
-    </java>
-    
-    <java classname="se.tube42.marm.Main" fork="yes">
-      <classpath path="build"/>  
-      <arg value="pack"/>
-      <arg value="build/out/4"/>
-      <arg value="build/out"/>
-      <arg value="atlas4" />
-    </java>
-        
   </target>      
 </project>

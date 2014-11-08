@@ -101,6 +101,12 @@ extends DirWalker
             final String type = FileHelper.getType(filename);
             final Entry e = el.get(base);
             
+            // just some error checking in case we have 1,2,3,4,... instead of 1,2,4,8,...
+            if(type.indexOf('3') != -1 || type.indexOf('5') != -1) {
+                System.err.println("BAD SCALE IN TYPE: " + type);
+                System.exit(20);
+            }
+
             // add file to entry
             int count = 0;
             for(int i = 0; i < Const.COUNT; i++) {

@@ -23,7 +23,7 @@ public class FileHelper
         if(n != -1) 
             filename = filename.substring(n+1);
         
-        n = filename.indexOf('_');
+        n = filename.lastIndexOf('_');
         if(n != -1)
             filename = filename.substring(0, n);
         
@@ -36,7 +36,7 @@ public class FileHelper
     
     public static String getType(String filename)
     {
-        final int start = filename.indexOf('_');
+        final int start = filename.lastIndexOf('_');
         if(start != -1) {
             filename = filename.substring(start+1);
             final int end = filename.indexOf('.');
