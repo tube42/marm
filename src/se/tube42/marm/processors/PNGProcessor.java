@@ -25,7 +25,8 @@ public class PNGProcessor implements Processor
             final String pngout = outfile.getPath();
             
             
-            ExecHelper.run("convert",
+            ExecHelper.run(
+                      "convert",
                       pngin,    
                       "-transparent", "#fffffe",
                       "-filter", plain ? "Point" : "Gaussian",

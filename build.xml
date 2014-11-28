@@ -1,4 +1,7 @@
 <project name="marm" basedir=".">
+  <property name="out" value="marm_app" />
+  <property name="site" location="../tube42.github.io/marm/bin" />
+  
   
   <target name="init">
     <mkdir dir="build"/>
@@ -13,7 +16,7 @@
   </target>
   
   <target name="jar" depends="compile" >
-    <jar jarfile="marm.jar" basedir="build" includes="se/tube42/marm/**" >
+    <jar jarfile="${out}.jar" basedir="build" includes="se/tube42/marm/**" >
       <manifest>
         <attribute name="Main-Class" value="se.tube42.marm.Main"/>
       </manifest>       
@@ -21,8 +24,7 @@
   </target>
   
   
-  <target name="run" depends="compile" >
-    
+  <target name="run" depends="compile" >    
     <!-- test resizer -->
     <java classname="se.tube42.marm.Main" fork="yes">
       <classpath path="build"/>  
@@ -39,5 +41,21 @@
       <arg value="build/out"/>
       <arg value="atlas1" />
     </java>
-  </target>      
+  </target>
+  
+  
+  <!-- create a new jar file and upload it to github -->
+  <target name="publish" depends="jar" >
+    <copy file="${out}.jar" todir="${site}"/>    
+    <exec executable="git" dir="${site}">
+      <arg line="add ${out}.jar"/>
+    </exec>        
+    <exec executable="git" dir="${site}">
+      <arg line="commit ${out}.jar -m 'published JAR from build.xml'"/>
+    </exec>        
+    <exec executable="git" dir="${site}">
+      <arg line="push"/>
+    </exec>    
+  </target>
+  
 </project>

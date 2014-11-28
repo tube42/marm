@@ -1,20 +1,26 @@
 
 package se.tube42.marm;
 
+import java.util.*;
+
 import se.tube42.marm.data.*;
 import se.tube42.marm.logic.*;
 import se.tube42.marm.processors.*;
+
 
 public class Main 
 {
     private static void do_help()
     {
-        System.err.println("Usage: \n" +
-                  "\t marm resize <dir-in> <dir-out>\n" +
-                  "\t marm pack <dir-in> <dir-out> <atlas name>\n"
+        System.err.println("Usage: \n" +                 
+                  "\t marm [OPTIONS] resize <dir-in> <dir-out>\n" +
+                  "\t marm [OPTIONS] pack <dir-in> <dir-out> <atlas name>\n" +
+                  "Valid options are:\n" +
+                  "\t name=value     define a variable\n"
                   );
         System.exit(3);
     }
+    
     
     private static void do_resize(String indir, String outdir)
     {
@@ -46,11 +52,40 @@ public class Main
     
     // ------------------------------------------------------------------------------
     
+    /*
+     * parse the options and remove them from argument list
+     */
+    public static String [] parse_options(String [] args )
+    {        
+        List<String> l = new ArrayList<String>();
+        
+        for(String s : args) {
+            int n = s.indexOf("=");
+            if(n == -1) {
+                l.add(s);
+            } else {
+                String s1 = s.substring(0, n);
+                String s2 = s.substring(n+1);
+                Variables.set(s1, s2);
+            }
+        }
+        
+        // convert List to String []
+        String [] ret = new String[ l.size()];
+        for(int i = 0; i < ret.length; i++)
+            ret[i] = l.get(i);
+        return ret;
+    }
+    
+    // ------------------------------------------------------------------------------
+    
     public static void main(String args[])
-    {
+    {              
+        args = parse_options(args);
+        
         if(args.length == 0) 
-            do_help();
-                
+            do_help();        
+        
         if(args[0].equals("resize") && args.length == 3) {
             do_resize(args[1], args[2]);
         } else if(args[0].equals("pack") && args.length == 4) {

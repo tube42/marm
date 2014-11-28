@@ -1,11 +1,11 @@
 TODO
 ----
  
- * add font support?
-
 
 DONE
 ----
+ * add variable lookup
+ * add font support?
  * add SVG generator by subclassing BaseHandler
  * add PNG handler
  * add code to start packer or resizer

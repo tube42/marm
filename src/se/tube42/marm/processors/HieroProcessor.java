@@ -21,7 +21,8 @@ public class HieroProcessor implements Processor
         final String fnt = outfile.getPath();
         
         
-        ExecHelper.run("hiero",
+        ExecHelper.run(
+                  "hiero",
                   "--batch",
                   "--input", hiero,
                   "--output", fnt,
