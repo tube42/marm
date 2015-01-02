@@ -11,7 +11,7 @@ public class ExecHelper
     /* see if the command is also a variale */
     private static String [] lookup_cmd(String [] args)
     {
-        String cmd = Variables.get(args[0]);
+        String cmd = Config.getVariable(args[0]);
         if(cmd == null)
             return args;
         

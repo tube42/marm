@@ -60,13 +60,28 @@ public class Main
         List<String> l = new ArrayList<String>();
         
         for(String s : args) {
-            int n = s.indexOf("=");
-            if(n == -1) {
-                l.add(s);
+            if(s.charAt(0) == '-') {
+                if(s.equals("-1")) {
+                    Config.enableSize(0);
+                } else if(s.equals("-2")) {
+                    Config.enableSize(1);
+                } else if(s.equals("-4")) {
+                    Config.enableSize(2);                
+                } else if(s.equals("-8")) {
+                    Config.enableSize(3);
+                } else {
+                    do_help();
+                }
+                    
             } else {
-                String s1 = s.substring(0, n);
-                String s2 = s.substring(n+1);
-                Variables.set(s1, s2);
+                int n = s.indexOf("=");
+                if(n == -1) {
+                    l.add(s);
+                } else {
+                    String s1 = s.substring(0, n);
+                    String s2 = s.substring(n+1);
+                    Config.setVariable(s1, s2);
+                }
             }
         }
         

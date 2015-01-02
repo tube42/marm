@@ -29,6 +29,8 @@
     <java classname="se.tube42.marm.Main" fork="yes">
       <classpath path="build"/>  
       <arg value="resize"/>
+      <arg value="-1"/>
+      <arg value="-2"/>      
       <arg value="data"/>
       <arg value="build/out"/>
     </java>

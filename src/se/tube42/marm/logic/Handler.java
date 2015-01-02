@@ -32,6 +32,8 @@ extends DirWalker
         this.lists.put(null, def_list);
         
         for(int i = 0; i < dirs.length; i++) {
+            if(!Config.isSizeEnabled(i)) continue;
+                
             String dirname = "" + (1 << i);
             dirs[i] = new File(outdir, dirname);
             dirs[i].mkdirs();
@@ -110,6 +112,7 @@ extends DirWalker
             // add file to entry
             int count = 0;
             for(int i = 0; i < Const.COUNT; i++) {
+                if(!Config.isSizeEnabled(i)) continue;                
                 char c = (char) ('0' + (1 << i));
                 
                 if( type.indexOf(c) != -1) { 
@@ -146,6 +149,8 @@ extends DirWalker
                 // System.out.println("HANDLING " + e.base);
             
                 for(int i = 0; i < Const.COUNT; i++) {
+                    if(!Config.isSizeEnabled(i)) continue;
+                    
                     final int j = get_best_match(e, i);
                     final String filename = e.in[j];                    
                     final File fin = new File(filename);
@@ -162,13 +167,13 @@ extends DirWalker
     {
         // smaller
         for(int i = level; i >= 0; i--) {
-            if(e.in[i] != null)
+            if(Config.isSizeEnabled(i) && e.in[i] != null)
                 return i;
         }
         
         // larger?
-        for(int i = level; i < Const.COUNT; i++) {
-            if(e.in[i] != null)
+        for(int i = level; i < Const.COUNT; i++) {            
+            if(Config.isSizeEnabled(i) && e.in[i] != null)
                 return i;
         }
         
