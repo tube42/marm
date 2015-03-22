@@ -1,6 +1,9 @@
 MARM
 ----
 
+.. image:: https://drone.io/github.com/tube42/marm/status.png
+    :target: https://drone.io/github.com/tube42/marm/latest
+
 MARM is a homegrown tool for creating multiple version of resources with minimal effort.
 
 
