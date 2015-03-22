@@ -15,7 +15,7 @@
     <javac srcdir="src" destdir="build" />
   </target>
   
-  <target name="jar" depends="compile" >
+  <target name="dist" depends="compile" >
     <jar jarfile="${out}.jar" basedir="build" includes="se/tube42/marm/**" >
       <manifest>
         <attribute name="Main-Class" value="se.tube42.marm.Main"/>
@@ -47,7 +47,7 @@
   
   
   <!-- create a new jar file and upload it to github -->
-  <target name="publish" depends="jar" >
+  <target name="publish" depends="dist" >
     <copy file="${out}.jar" todir="${site}"/>    
     <exec executable="git" dir="${site}">
       <arg line="add ${out}.jar"/>
