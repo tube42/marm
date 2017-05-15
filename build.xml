@@ -1,63 +1,66 @@
 <project name="marm" basedir=".">
   <property name="out" value="marm_app" />
   <property name="site" location="../tube42.github.io/marm/bin" />
-  
-  
+
+  <property name="ant.build.javac.source" value="1.7" />
+  <property name="ant.build.javac.target" value="1.7" />
+
   <target name="init">
     <mkdir dir="build"/>
   </target>
-  
+
   <target name="clean"  description="clean" >
     <delete dir="build"/>
+    <delete file="marm_app.jar" />
   </target>
-  
+
   <target name="compile" depends="init" >
     <javac srcdir="src" destdir="build" />
   </target>
-  
+
   <target name="dist" depends="compile" >
     <jar jarfile="${out}.jar" basedir="build" includes="se/tube42/marm/**" >
       <manifest>
         <attribute name="Main-Class" value="se.tube42.marm.Main"/>
-      </manifest>       
+      </manifest>
     </jar>
   </target>
-  
-  
-  <target name="run" depends="compile" >    
+
+
+  <target name="run" depends="compile" >
     <!-- test resizer -->
     <java classname="se.tube42.marm.Main" fork="yes">
-      <classpath path="build"/>  
+      <classpath path="build"/>
       <arg value="resize"/>
       <arg value="-1"/>
-      <arg value="-2"/>      
+      <arg value="-2"/>
       <arg value="data"/>
       <arg value="build/out"/>
     </java>
-    
+
     <!-- test packer -->
     <java classname="se.tube42.marm.Main" fork="yes">
-      <classpath path="build"/>  
+      <classpath path="build"/>
       <arg value="pack"/>
       <arg value="build/out/1"/>
       <arg value="build/out"/>
       <arg value="atlas1" />
     </java>
   </target>
-  
-  
+
+
   <!-- create a new jar file and upload it to github -->
   <target name="publish" depends="dist" >
-    <copy file="${out}.jar" todir="${site}"/>    
+    <copy file="${out}.jar" todir="${site}"/>
     <exec executable="git" dir="${site}">
       <arg line="add ${out}.jar"/>
-    </exec>        
+    </exec>
     <exec executable="git" dir="${site}">
       <arg line="commit ${out}.jar -m 'published JAR from build.xml'"/>
-    </exec>        
+    </exec>
     <exec executable="git" dir="${site}">
       <arg line="push"/>
-    </exec>    
+    </exec>
   </target>
-  
+
 </project>
