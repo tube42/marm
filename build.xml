@@ -27,13 +27,14 @@
   </target>
 
 
-  <target name="run" depends="compile" >
+  <target name="test" depends="compile" >
     <!-- test resizer -->
     <java classname="se.tube42.marm.Main" fork="yes">
       <classpath path="build"/>
       <arg value="resize"/>
       <arg value="-1"/>
       <arg value="-2"/>
+      <arg value="-v"/>
       <arg value="data"/>
       <arg value="build/out"/>
     </java>
@@ -41,6 +42,7 @@
     <!-- test packer -->
     <java classname="se.tube42.marm.Main" fork="yes">
       <classpath path="build"/>
+      <arg value="-v"/>
       <arg value="pack"/>
       <arg value="build/out/1"/>
       <arg value="build/out"/>

@@ -8,20 +8,27 @@ import se.tube42.marm.logic.*;
 import se.tube42.marm.processors.*;
 
 
-public class Main 
+public class Main
 {
     private static void do_help()
     {
-        System.err.println("Usage: \n" +                 
-                  "\t marm [OPTIONS] resize <dir-in> <dir-out>\n" +
-                  "\t marm [OPTIONS] pack <dir-in> <dir-out> <atlas name>\n" +
-                  "Valid options are:\n" +
-                  "\t name=value     define a variable\n"
-                  );
+	final String usage = "Usage: \n" +
+	    "\t marm [OPTIONS] resize <dir-in> <dir-out>\n" +
+	    "\t marm [OPTIONS] pack <dir-in> <dir-out> <atlas name>\n" +
+	    "Valid options are:\n" +
+	    "\t name=value     define a variable\n" +
+	    "\t -1             x 1 size\n" +
+	    "\t -2             x 2 size\n" +
+	    "\t -4             x 4 size\n" +
+	    "\t -8             x 8 size\n" +
+	    "\t -v             be verbose\n";
+
+
+        System.err.println(usage );
         System.exit(3);
     }
-    
-    
+
+
     private static void do_resize(String indir, String outdir)
     {
         Handler bh = new Handler(outdir);
@@ -29,12 +36,12 @@ public class Main
         bh.setProcessor("png", new PNGProcessor());
         bh.setProcessor("hiero", new HieroProcessor());
         bh.setDefaultProcessor(new CopyProcessor());
-        
+
         bh.scan(indir);
-        
-        bh.generate();        
+
+        bh.generate();
     }
-    
+
     private static void do_pack(String indir, String outdir, String name)
     {
         try {
@@ -43,22 +50,22 @@ public class Main
                       indir,
                       outdir,
                       name
-                      );      
+                      );
         } catch(Exception e) {
             System.err.println("ERROR: " + e);
             System.exit(20);
         }
     }
-    
+
     // ------------------------------------------------------------------------------
-    
+
     /*
      * parse the options and remove them from argument list
      */
     public static String [] parse_options(String [] args )
-    {        
+    {
         List<String> l = new ArrayList<String>();
-        
+
         for(String s : args) {
             if(s.charAt(0) == '-') {
                 if(s.equals("-1")) {
@@ -66,13 +73,15 @@ public class Main
                 } else if(s.equals("-2")) {
                     Config.enableSize(1);
                 } else if(s.equals("-4")) {
-                    Config.enableSize(2);                
+                    Config.enableSize(2);
                 } else if(s.equals("-8")) {
                     Config.enableSize(3);
+		} else if(s.equals("-v")) {
+		    Config.setVerbose(true);
                 } else {
                     do_help();
                 }
-                    
+
             } else {
                 int n = s.indexOf("=");
                 if(n == -1) {
@@ -84,28 +93,28 @@ public class Main
                 }
             }
         }
-        
+
         // convert List to String []
         String [] ret = new String[ l.size()];
         for(int i = 0; i < ret.length; i++)
             ret[i] = l.get(i);
         return ret;
     }
-    
+
     // ------------------------------------------------------------------------------
-    
+
     public static void main(String args[])
-    {              
+    {
         args = parse_options(args);
-        
-        if(args.length == 0) 
-            do_help();        
-        
+
+        if(args.length == 0)
+            do_help();
+
         if(args[0].equals("resize") && args.length == 3) {
             do_resize(args[1], args[2]);
         } else if(args[0].equals("pack") && args.length == 4) {
             do_pack(args[1], args[2], args[3]);
-            
+
         } else {
             do_help();
         }

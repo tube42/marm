@@ -7,49 +7,52 @@ import se.tube42.marm.logic.*;
 
 public class SVGProcessor implements Processor
 {
-    
+
+    private final int DPI = 96;
+
     public void process(
-              String type, int zoom, 
+              String type, int zoom,
               File infile, File outfile)
           throws IOException
     {
         final boolean plain = type.indexOf('p') != -1;
-        final boolean keep = type.indexOf('k') != -1;        
+        final boolean keep = type.indexOf('k') != -1;
         final float ratio = keep ? 1f : (float)Math.pow(2, zoom);
-        
+
         outfile = FileHelper.replaceExtension(outfile, "png");
         final String svg = infile.getPath();
         final String png = outfile.getPath();
-        
-        
+
         if(plain) {
             ExecHelper.run("inkscape",
                       "--without-gui",
                       "--file="+ svg,
-                      "--export-dpi=" + (90 * ratio),
+                      "--export-dpi=" + (DPI * ratio),
                       "--export-background-opacity=0",
+		      "--export-area-page",
                       "--export-png="+png
-                      );                
+                      );
         } else {
             ExecHelper.run("inkscape",
                       "--without-gui",
                       "--file="+svg,
-                      "--export-dpi=1440",
+		       "--export-dpi=" + (DPI * 16),
                       "--export-background-opacity=0",
-                      "--export-png="+png 
+		      "--export-area-page",
+                      "--export-png="+png
                       );
-            
+
             ExecHelper.run("convert",
                       png,
-                      "-transparent", 
+                      "-transparent",
                       "#fffffe",
                       "-resize",
                       "" + (6.25 * ratio) + "%",
                       "-define",
                       "png:bit-depth=8",
                       "png32:" + png
-                      );            
-            
-        }        
+                      );
+
+        }
     }
 }
