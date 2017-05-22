@@ -1,12 +1,7 @@
 MARM
 ====
 
-MARM is a homegrown tool for creating multiple version of resources with minimal effort.
-
-
-For example, assume you want to have an asset in x1 and x2 sizes.
-You could do this manually but marm simplifies the process for you.
-
+MARM is a simple tool for processing assets for different device resolutions.
 
 Building
 --------
@@ -18,7 +13,7 @@ To build run::
 
 This will create marm_app.jar. To simplify its use you may create an alias::
 
-   alias marm="java -jar marm_app.jar"
+   alias marm="java -jar `pwd`/marm_app.jar"
 
 Usage
 -----
@@ -39,6 +34,27 @@ Valid options are::
 If you don't specify any sizes then the tool will assume x1, x2 and x4.
 
 
+Conversion rules
+~~~~~~~~~~~~~~~~
+
+The conversion rules are any part of the filename between the last '_' and the file extension.
+For example the file *A.svg* with the conversion rules *2*, *4* and *p* is renamed to *A_24p.svg*.
+
+
+The rules decide how each file will be processed:
+
+* *Plain files:* p specifies that the file will not be processed for removing alpha-blended pixels.
+* *Keep file:* k specifies that the file will not be scaled.
+* *Scale rules:* 1/2/4/8 specifies the target scales.
+
+For example the file A.svg will be converted to A.png and scaled to x1, x2 and x4. The result will be stored in 1/A.png, 2/A.png and 4/A.png
+However, if we were instead given A_12p.svg and A_4.svg the former would have been used to create 1/A.png and 2/A.png without
+alpha processing while the latter would have been used to create 4/A.png.
+
+
+If a size is missing, marm will try to guess a compatible source.
+
+
 Variables
 ~~~~~~~~~
 
@@ -50,17 +66,4 @@ MARM assumes the following commands to be available
 
 You can replace these with your own, for example you can do::
 
-    marm *inkscape=/opt/inkscape/bin/inkscape* resize indir outdir
-
-
-Conversion rules
-~~~~~~~~~~~~~~~~
-
-The last part of the source filename defines how it will be converted.
-
-* *Source rules:* Normally given A.svg marm will create 1/A.png, 2/A.png and 4/A.png. However given A_14.png and A_2.png marm will use the former to create 1/A.png and 4/A.png and the latter to create 2/A.png.
-* *Keep file:* A file named A_k.svg will not be resized (e.g. 1/A.png and 4/A.png will be of the same size).
-* *Plain files:* A file named A_p.svg will not be processed to remove alpha-blend pixels.
-
-
-You can combine multiple rules. For example A_12pk.svg is a valid input file.
+    marm inkscape="/opt/inkscape/bin/inkscape --export-background=red" resize indir outdir
