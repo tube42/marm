@@ -8,6 +8,20 @@ import se.tube42.marm.data.*;
 public class ExecHelper
 {
 
+    // read entire inputstream as a string:
+    private static String read_all(InputStream i)
+        throws IOException
+    {
+        BufferedInputStream bis = new BufferedInputStream(i);
+        ByteArrayOutputStream buf = new ByteArrayOutputStream();
+        for(;;) {
+            int n = bis.read();
+            if(n == -1)
+                return buf.toString();
+            buf.write((byte) n);
+        }
+    }
+
     /* see if the command is also a variale */
     private static String [] lookup_cmd(String [] args)
     {
@@ -35,7 +49,7 @@ public class ExecHelper
         return new_args;
     }
 
-    public static void run(String... args_)
+    public static String run(String... args_)
           throws IOException
     {
         String [] args = lookup_cmd(args_);
@@ -44,13 +58,17 @@ public class ExecHelper
 	    System.out.println("Executing " + String.join(" ", args));
 
         Process p = Runtime.getRuntime().exec(args);
-
         try {
+            InputStream i = p.getInputStream();
             p.waitFor();
 
             if(p.exitValue() != 0) {
                 throw new IOException("Exit code " + p.exitValue());
             }
+
+            String ret = read_all(i);
+            i.close();
+            return ret;
 
         } catch(IOException e) {
             throw e;

@@ -8,7 +8,27 @@ import se.tube42.marm.logic.*;
 public class SVGProcessor implements Processor
 {
 
-    private final int DPI = 96;
+    // fix for an inkscape crazy user-breaking major-major change
+    private static int dpi = -1;
+    private static int getDPI()
+    throws IOException
+    {
+        if(dpi == -1) {
+            dpi = 96;
+            try {
+                String output = ExecHelper.run("inkscape", "--version");
+                String vstr = output.split(" ")[1];
+                float vf = Float.parseFloat(vstr);
+                if(vf > 0.2 && vf < 0.92 )
+                    dpi = 90;
+                System.out.println("inkscape version " + vf + " -> using DPI=" + dpi);
+            } catch(Exception e) {
+                // can't do anything about it
+            }
+
+        }
+        return dpi;
+    }
 
     public void process(
               String type, int zoom,
@@ -27,7 +47,7 @@ public class SVGProcessor implements Processor
             ExecHelper.run("inkscape",
                       "--without-gui",
                       "--file="+ svg,
-                      "--export-dpi=" + (DPI * ratio),
+                      "--export-dpi=" + (getDPI() * ratio),
                       "--export-background-opacity=0",
 		      "--export-area-page",
                       "--export-png="+png
@@ -36,7 +56,7 @@ public class SVGProcessor implements Processor
             ExecHelper.run("inkscape",
                       "--without-gui",
                       "--file="+svg,
-		       "--export-dpi=" + (DPI * 16),
+		       "--export-dpi=" + (getDPI() * 16),
                       "--export-background-opacity=0",
 		      "--export-area-page",
                       "--export-png="+png
